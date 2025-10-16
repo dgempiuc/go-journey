@@ -1,4 +1,4 @@
-package remoterepo
+package remote_repo
 
 func Reverse(s string) string {
 	runes := []rune(s)
