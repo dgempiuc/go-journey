@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	"github.com/dgempiuc/go-journey/remote_repo"
+	"github.com/dgempiuc/go-journey/remoterepo"
 )
 
 func main() {
 	original := "Hello, World!"
-	reversed := remote_repo.Reverse(original)
+	reversed := remoterepo.Reverse(original)
 	fmt.Println(reversed)
 }

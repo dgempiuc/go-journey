@@ -1,3 +1,3 @@
 module github.com/dgempiuc/go-journey
 
-go 1.25
+go 1.25.1
