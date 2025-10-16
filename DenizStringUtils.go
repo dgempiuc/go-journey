@@ -1,4 +1,4 @@
-package remote_repo_import
+package go_journey
 
 func Reverse(s string) string {
 	runes := []rune(s)
