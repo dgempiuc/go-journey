@@ -6,3 +6,5 @@ github.com/dgempiuc/go-journey v0.0.2 h1:Su9OWQk++Iy5205Q+eAsvsmSt9IMN8Z/A+32Hha
 github.com/dgempiuc/go-journey v0.0.2/go.mod h1:HObHLV2Gjm2hB+uCP8iejbbYEOeru8przPoiB/p65G8=
 github.com/dgempiuc/go-journey v0.0.3 h1:E0lqs+PnGWcaNSdTHHxyx0TNma0apjqI2sHIquUagRA=
 github.com/dgempiuc/go-journey v0.0.3/go.mod h1:trGIPfanPwWTIiZCkSjXoLW+e/tEyAxP/cTi7H/0xoY=
+github.com/dgempiuc/go-journey v0.0.4 h1:kSr1mD7moKfuLjFExeFer2XFmQ3KQNzbj0pN3lVoewQ=
+github.com/dgempiuc/go-journey v0.0.4/go.mod h1:vkFJOJSnEy490aEMdaejHOV+RqZvFYfxtvrW36EbLF8=
