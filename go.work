@@ -5,4 +5,5 @@ use (
 	t02/testrepo
 	t02
 	t01
+	t04
 )
