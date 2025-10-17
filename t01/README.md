@@ -1,3 +1,10 @@
+go <command> [arguments]
+
+go build ...			compile packages and dependencies
+go install ...			compile and install packages and dependencies
+go get ...				add dependencies to current module and install them
+go test ...				test packages
+
 1. ilk adım
 
 go.mod oluştur.
@@ -41,6 +48,13 @@ cmp.Diff("Hello World", "Hello Go")
 şimdi, external module'e bağımlılık/depenndency var. bu module'ü download etmeli ve go.mod file'a kaydetmeli.
 go mod tidy
 bu komut, import edilen package'lar için eksik module gereksinimlerini ekler,  artık kullanılmayan module gereksinimleri kaldırır.
+
+her zaman en güncel halini getirmeyebilir, çünkü module cache kullanır.
+yeni değişiklikleri hemen çekmez.
+module'i ilk indirdiğinde cache'e koyar. (pkg/mod)
+go mod tidy desen bile cacheten alır.
+
+go clean -modcache // module cachei temizler.
 
 bunu çalıştırınca, go mod dosyasına ekler.
 require github.com/google/go-cmp v0.5.4
