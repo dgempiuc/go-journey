@@ -191,7 +191,7 @@ Kullanmak istediğin yerde de:
 
 ```go
 import (
-  "denizg/repo/localrepo"
+  "denizg/repository/localrepo"
 )
 
 localrepo.Truncate(reversed, 4, "aaa")

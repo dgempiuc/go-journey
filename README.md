@@ -6,3 +6,4 @@
 - **t02/** - Kendi **Go** paketini remote olarak yayınlama
 - **t03/** - **Go** naming conventions ve Claude Code nameco custom komutu
 - **t04/** - **Gin** rest api tanımlama [https://go.dev/doc/tutorial/web-service-gin](https://go.dev/doc/tutorial/web-service-gin)
+- **t05/** - **Gin** ve **Gorm** 
