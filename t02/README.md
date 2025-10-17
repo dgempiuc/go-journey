@@ -1,148 +1,198 @@
-1.package
+# Tutorial 02 - Go Modules Deep Dive
 
-go programları package'lar halinde organize edilir. 
-bir package, birlikte compile edilen aynı directory içerisindeki source filelar yani functionlar, typelar, variablelar ve constantlardır.
-bunlar, aynı paket içindeki diğer tüm source filelar tarafından görülebilir.
+## 1. Package
 
+**Go** programları **package**'lar halinde organize edilir.
 
-2.module 
+Bir **package**, birlikte compile edilen aynı directory içerisindeki source file'lar yani **function**'lar, **type**'lar, **variable**'lar ve **constant**'lardır.
 
-bir repo, bir ya da daha fazla module içerebilir.
-module, birlikte release edilen, ilgili go packagelarının derlemesi.
-bir go reposu, tipik olarak yalnızca bir module içerir, reponun root'unda konumludur,
-module, go.mod dosyasının bulunduğu directorydeki packageları ve bu directornin altındaki diğer directoryleri içerir.
-ismi go.mod'dur, orada module path tanımlanır, bu da, module içindeki tüm packagelar için import path prefixidir.
+Bunlar, aynı **package** içindeki diğer tüm source file'lar tarafından görülebilir.
 
-mesela
+## 2. Module
 
-hello.go (package ismi main olmalı)
-go.mod (module x olsun. her zaman project rootunda olmalı)
+Bir repo, bir ya da daha fazla **module** içerebilir.
+
+**Module**, birlikte release edilen, ilgili **Go** **package**'larının derlemesi.
+
+Bir **Go** reposu, tipik olarak yalnızca bir **module** içerir, repo'nun root'unda konumludur.
+
+**Module**, **go.mod** dosyasının bulunduğu directory'deki **package**'ları ve bu directory'nin altındaki diğer directory'leri içerir.
+
+İsmi **go.mod**'dur, orada **module** path tanımlanır. Bu da, **module** içindeki tüm **package**'lar için **import** path prefix'idir.
+
+### Örnek Yapı
+
+```
+hello.go          (package ismi main olmalı)
+go.mod            (module x olsun. her zaman project root'unda olmalı)
 tree/
-- tree.go (package ismi tree)
+  tree.go         (package ismi tree)
+```
 
-tree.go dosyasını hello.go main içerisinde kullanabilmek için, import edilmeli ama package import edilmeli.
+**tree.go** dosyasını **hello.go** **main** içerisinde kullanabilmek için **import** edilmeli:
 
+```go
 import "x/tree"
+```
 
-go.mod'da module tanımı a/b/c olabilir. ama fiziksel olarak a/b/c paketinin olmasına gerek yok.
-ama tree'yi import ederken a/b/c/tree yazılır.
+**go.mod**'da **module** tanımı `a/b/c` olabilir. Ama fiziksel olarak `a/b/c` **package**'inin olmasına gerek yok.
 
-ya da go workspace kullanılır.
-multi-module development için.
-aynı anda birden fazla go module üzerinde çalışmayı sağlar.
+Ama **tree**'yi **import** ederken `a/b/c/tree` yazılır.
 
-ana root directoryde
-go.work dosyası. içerisinde, go.mod olan tüm directoryleri yani module'leri dahil eder.
+## 3. Go Workspace
 
+**Go** workspace, multi-module development için kullanılır.
+
+Aynı anda birden fazla **Go** **module** üzerinde çalışmayı sağlar.
+
+Ana root directory'de **go.work** dosyası. İçerisinde, **go.mod** olan tüm directory'leri yani **module**'leri dahil eder.
+
+```go
 go 1.25
 
 use (
-t02/localrepo
-t02/testrepo
-t02
-t01
+  t02/localrepo
+  t02/testrepo
+  t02
+  t01
 )
+```
 
-go work sync // go.work dosyasındaki tüm module'lerin dependencysisini sync eder.
+```bash
+go work sync  # go.work dosyasındaki tüm module'lerin dependency'sini sync eder
+```
 
-3. install/build
+## 4. Install/Build
 
-code'u, build etmeden önce remote repoya publish etmeye gerek yok.
-bir module, local olarak bir repoya ait olmadan tanımlanabilir.
-ama remote repolardaki go kodlarını da kullanmaya imkan var.
+Code'u build etmeden önce remote repo'ya publish etmeye gerek yok.
 
-go install çalışması için, cwd'deki module'deki path verilmeli, yoksa hata. aşağıdakilerin 3ü de kabul.
-go install example/user/hello
-// build eder ve binary dosyası oluşturur, localde %USERPROFILE%\go\bin\ altına exe dosyası koyar.
-// GOPATH ve GOBIN environemnt variableları ile, install directory control edilir.
-// GOPATH altındaki bin klasörüne ya da GOBIN klasörüne.
-// go env -w GOBIN=/x/y ile default value ayarlanır.
-// go env -u GOBIN ile de, önceden ayarlanan unset edilir.
+Bir **module**, local olarak bir repo'ya ait olmadan tanımlanabilir.
 
+Ama remote repo'lardaki **Go** kodlarını da kullanmaya imkan var.
+
+### Go Install
+
+`**go** install` çalışması için, cwd'deki **module**'deki path verilmeli, yoksa hata. Aşağıdakilerin 3'ü de kabul:
+
+```bash
 go install example/user/hello
 go install .
 go install
+```
 
-daha sonra da, exe dosyası çalıştırılır.
-hello // hello world
+`**go** install`:
+- Build eder ve binary dosyası oluşturur
+- Local'de `%USERPROFILE%\go\bin\` altına exe dosyası koyar
+- `GOPATH` ve `GOBIN` environment variable'ları ile install directory control edilir
+- `GOPATH` altındaki **bin** klasörüne ya da `GOBIN` klasörüne
 
-install dediğin için build de yaptı ve hello.exe oluşturdu.
-eğer exe olmadan hello yazsaydın exe bulamadım diyecekti.
-build etmeden direkt çalıştırmak için.
+```bash
+go env -w GOBIN=/x/y  # default value ayarlanır
+go env -u GOBIN       # önceden ayarlanan unset edilir
+```
 
-go run hello.go 
+Daha sonra da exe dosyası çalıştırılır:
 
-4. remote paketler
-go'da remote paketler de indirilip kullanılabilir.
+```bash
+hello  # hello world
+```
 
+**install** dediğin için build de yaptı ve **hello.exe** oluşturdu.
+
+Eğer exe olmadan **hello** yazsaydın exe bulamadım diyecekti.
+
+Build etmeden direkt çalıştırmak için:
+
+```bash
+go run hello.go
+```
+
+## 5. Remote Paketler
+
+**Go**'da remote **package**'ler de indirilip kullanılabilir:
+
+```go
 import "github.com/gin-gonic/gin"
+```
 
-go get ile indirilip kullanılır.
+`**go** get` ile indirilip kullanılır:
+
+```bash
 go get github.com/gin-gonic/gin
+```
 
-http isteği yapar, url'deki <meta name="go-import"> tagından gerçek repo url'ini bulur ve git clone yapar.
-bu sayede, repo'nun yerini değiştiresen bile, import pathler değişmez.
+HTTP isteği yapar, URL'deki `<meta name="go-import">` tag'inden gerçek repo URL'ini bulur ve **git clone** yapar.
 
-özetle
-java maven		go modules
-pom.xml			go.mod
-maven central	direkt git repoları
-mvn install		go get
-mvn clean pakcage go build
+Bu sayede, repo'nun yerini değiştiresen bile **import** path'ler değişmez.
 
-5.kendi remote repomuzu oluşturma
+### Karşılaştırma
 
-githubda repo oluştur.
-mesela github.com/dgempiuc/go-journey
+| Java Maven | Go Modules |
+|------------|------------|
+| pom.xml | **go.mod** |
+| Maven Central | Direkt **git** repoları |
+| mvn install | **go get** |
+| mvn clean package | **go build** |
 
-rootda go.mod olacak.
+## 6. Kendi Remote Repo'muzu Oluşturma
 
-'''
+GitHub'da repo oluştur:
+- Mesela `github.com/dgempiuc/go-journey`
+
+Root'da **go.mod** olacak:
+
+```go
 module github.com/dgempiuc/go-journey
 
 go 1.25.1
-'''
+```
 
-daha sonra istediğim gibi directory olusturabilirim.
-remoterepo diye directory olustrudum, içerisinde stringutils.go olusturdum, Reverse functionı yazdım.
-bunu pushladım
+Daha sonra istediğim gibi directory oluşturabilirim.
 
-daha sonra test etmek istediğim yerde, önce bunu indiriyorum.
+**remoterepo** diye directory oluşturdum, içerisinde **stringutils.go** oluşturdum, **Reverse** **function**'ı yazdım.
 
+Bunu push'ladım.
+
+Daha sonra test etmek istediğim yerde, önce bunu indiriyorum:
+
+```bash
 go get github.com/dgempiuc/go-journey
+```
 
-bu gidip, bulunduğu konumdaki go.mod'u günceller ve '''require github.com/dgempiuc/go-journey''' olarak ekler.
+Bu gidip, bulunduğu konumdaki **go.mod**'u günceller ve şunu ekler:
 
-'''
+```go
+require github.com/dgempiuc/go-journey
+```
+
+Kullanım:
+
+```go
 import (
-"fmt"
-"github.com/dgempiuc/go-journey/remoterepo"
+  "fmt"
+  "github.com/dgempiuc/go-journey/remoterepo"
 )
 
 remoterepo.Reverse(original)
-'''
+```
 
-olarak kullanırım.
+## 7. Local Module Kullanma
 
+**localrepo** isminde **module** oluştur (`denizg/repos`), **stringutils.go** dosyasını koy.
 
-6.local module kullanma
+Bu **module**'ü eklemek istediğin yerde, oranın **go.mod**'una şunu eklersin:
 
-localrepo isminde module oluştur (denizg/repos), stringutils.go dosyasını koy. 
-
-bu modul'ü eklemek istediğin yerde, oranın go.mod'una şunu eklersin
-
-'''
+```go
 require denizg/repo/localrepo v0.0.0
 replace denizg/repo/localrepo => ../localrepo
-'''
+```
 
-kullanmak istediğin yerde de
+Kullanmak istediğin yerde de:
 
-'''
+```go
 import (
-"denizg/repo/localrepo"
+  "denizg/repo/localrepo"
 )
 
 localrepo.Truncate(reversed, 4, "aaa")
-'''
-
+```

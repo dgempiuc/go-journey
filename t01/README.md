@@ -1,81 +1,124 @@
+# Tutorial 01 - Go Basics
+
+## Go Commands
+
+```bash
 go <command> [arguments]
 
-go build ...			compile packages and dependencies
-go install ...			compile and install packages and dependencies
-go get ...				add dependencies to current module and install them
-go test ...				test packages
+go build ...     # compile packages and dependencies
+go install ...   # compile and install packages and dependencies
+go get ...       # add dependencies to current module and install them
+go test ...      # test packages
+```
 
-1. ilk adım
+## 1. İlk Adım
 
-go.mod oluştur.
+**go.mod** oluştur:
 
+```go
 module journey/denizg/tutorial01
 
 go 1.25
+```
 
-daha sonra hello.go dosyası oluştur.
-package ismi main olacak.
-hello world yazdıracak main functiona sahip.
+Daha sonra **hello.go** dosyası oluştur.
+- **package** ismi **main** olacak
+- Hello world yazdıracak **main** **function**'a sahip
 
-go install komutunu çalıştırınca, build eder, exe üretir ve onu da %USERPROFILE%\go\bin\ altına install eder /yükler.
-install directory, GOPATH ve GOBIN ile değiştirilir.
+### Build & Install
 
-exe ismi, go.mod'daki en son paket ismi. yani tutorial01.exe
+```bash
+go install
+```
 
-go install yerine go build denseydi, output dosyası o anki klasörüde oluşturulurdu ama exe oluşturulmazdı.
+`**go** install` komutunu çalıştırınca:
+- Build eder
+- exe üretir
+- Onu da `%USERPROFILE%\go\bin\` altına install eder/yükler
 
-2. package'ları module'den import etme
+**Install directory**, `GOPATH` ve `GOBIN` ile değiştirilir.
 
-morepackage olustur. altına da reverse.go oluştur.
+**exe** ismi, **go.mod**'daki en son **package** ismi. Yani `tutorial01.exe`
 
-hello.go'ya import edilir.
+> `**go** install` yerine `**go** build` denseydi, output dosyası o anki klasörde oluşturulurdu ama exe oluşturulmazdı.
 
+## 2. Package'ları Module'den Import Etme
+
+**morepackage** oluştur. Altına da **reverse.go** oluştur.
+
+**hello.go**'ya **import** edilir:
+
+```go
 import "journey/denizg/tutorial01/morepackage"
 
 morepackage.Reverse("Hello, world!")
+```
 
-3. package'ları remote module'lerden import etme
+## 3. Package'ları Remote Module'lerden Import Etme
 
-import path, package source code'un git gibi version kontrol sistemi kullanarak nasıl elde edeceğini açıklayabilir.
-eğer url görürse, packageları otomatik olarak remote repolardan çeker.
+**import** path, **package** source code'un **git** gibi version kontrol sistemi kullanarak nasıl elde edeceğini açıklayabilir.
 
-hello dosyasına import olarak bunu ekle.
+Eğer URL görürse, **package**'ları otomatik olarak remote repolardan çeker.
 
+**hello** dosyasına **import** olarak bunu ekle:
+
+```go
 import "github.com/google/go-cmp/cmp"
 
 cmp.Diff("Hello World", "Hello Go")
+```
 
-şimdi, external module'e bağımlılık/depenndency var. bu module'ü download etmeli ve go.mod file'a kaydetmeli.
+Şimdi, external **module**'e bağımlılık/dependency var. Bu **module**'ü download etmeli ve **go.mod** file'a kaydetmeli.
+
+```bash
 go mod tidy
-bu komut, import edilen package'lar için eksik module gereksinimlerini ekler,  artık kullanılmayan module gereksinimleri kaldırır.
+```
 
-her zaman en güncel halini getirmeyebilir, çünkü module cache kullanır.
-yeni değişiklikleri hemen çekmez.
-module'i ilk indirdiğinde cache'e koyar. (pkg/mod)
-go mod tidy desen bile cacheten alır.
+Bu komut:
+- **import** edilen **package**'lar için eksik **module** gereksinimlerini ekler
+- Artık kullanılmayan **module** gereksinimleri kaldırır
 
-go clean -modcache // module cachei temizler.
+Her zaman en güncel halini getirmeyebilir, çünkü **module** cache kullanır.
+- Yeni değişiklikleri hemen çekmez
+- **Module**'i ilk indirdiğinde cache'e koyar (`pkg/mod`)
+- `**go** mod tidy` desen bile cache'ten alır
 
-bunu çalıştırınca, go mod dosyasına ekler.
+```bash
+go clean -modcache  # module cache'i temizler
+```
+
+Bunu çalıştırınca, **go.mod** dosyasına ekler:
+
+```go
 require github.com/google/go-cmp v0.5.4
+```
 
-ya da tek tek bagımlılıkları eklersin.
-go get go get github.com/google/go-cmp/cmp
+Ya da tek tek bağımlılıkları eklersin:
 
-bunlar %USER%/go altında pkg/mod altına indirilir.
+```bash
+go get github.com/google/go-cmp/cmp
+```
 
-4. test etme
+Bunlar `%USER%/go` altında `pkg/mod` altına indirilir.
 
-4. test etme
+## 4. Test Etme
 
-go, lightweight test frameworküne sahip.
-"go test" command + "testing" package
+**Go**, lightweight test framework'üne sahip:
+- `**go** test` command + `testing` **package**
 
-bir testi, _test.go ismiyle biten bir dosya yaratarak yazarsın.
-bu, TestXXX isimli functionlar içerir ve signature, func (t *testing.T) içerir.
-test framework, bu tür her bir functionı çalıştırır.
+Bir testi, `_test.go` ismiyle biten bir dosya yaratarak yazarsın.
 
-eğer function, t.Error yada t.Fail gibi failure functionları çağırırsa, test, failed oldu sayılır.
+Bu, `TestXXX` isimli **function**'lar içerir ve signature:
 
+```go
+func (t *testing.T)
+```
+
+Test framework, bu tür her bir **function**'ı çalıştırır.
+
+Eğer **function**, `t.Error` yada `t.Fail` gibi failure **function**'ları çağırırsa, test failed oldu sayılır.
+
+```bash
 go test
-// PASS
+# PASS
+```
