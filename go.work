@@ -1,0 +1,8 @@
+go 1.25
+
+use (
+	t02/localrepo
+	t02/testrepo
+	t02
+	t01
+)
