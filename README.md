@@ -7,3 +7,4 @@
 - **t03/** - **Go** naming conventions ve Claude Code nameco custom komutu
 - **t04/** - **Gin** rest api tanımlama [https://go.dev/doc/tutorial/web-service-gin](https://go.dev/doc/tutorial/web-service-gin)
 - **t05/** - **Gin** ve **Gorm** 
+- **t06/** - **Wire** ile Dependency Injection
